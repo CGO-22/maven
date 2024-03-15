@@ -43,7 +43,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     - run: C:\tools\apache-maven-3.9.6\bin\mvn --batch-mode --update-snapshots verify
-    - run: mkdir staging && cp target/*.jar staging
+    - run: |
+        mkdir staging  
+        cp target/*.jar staging
     - uses: actions/upload-artifact@v3
       with:
         name: Package
