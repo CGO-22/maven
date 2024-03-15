@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Check if Maven is installed
       run: |
-        if !(Test-Path "$(Get-Command mvn -ErrorAction SilentlyContinue).Source") {
+        if (!(Test-Path "$(Get-Command mvn -ErrorAction SilentlyContinue).Source")) {
           Write-Host "Maven is not installed, proceeding with installation..."
           # Place installation steps here
         } else {
