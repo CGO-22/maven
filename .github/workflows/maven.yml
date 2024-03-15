@@ -10,19 +10,17 @@ jobs:
   install_maven:
     runs-on: self-hosted
     steps:
-    - name: Download Maven
+    - name: Check if Maven is installed
       run: |
-        Invoke-WebRequest -Uri 'https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.zip' -OutFile 'maven.zip'
-        Expand-Archive -Path 'maven.zip' -DestinationPath 'C:\tools'
-    - name: Set up Maven
-      run: |
-        $env:PATH += ";C:\tools\apache-maven-3.9.6\bin"
-        mvn -version
-        
+        if !(Test-Path "$(Get-Command mvn -ErrorAction SilentlyContinue).Source") {
+          Write-Host "Maven is not installed, proceeding with installation..."
+          # Place installation steps here
+        } else {
+          Write-Host "Maven is already installed."
+        }
+
   build_test:
-
     runs-on: self-hosted
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -32,9 +30,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: C:\tools\apache-maven-3.9.6\bin\mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml
 
-   
   publish-job:
     runs-on: self-hosted
     needs: build_test
@@ -44,7 +41,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - run: C:\tools\apache-maven-3.9.6\bin\mvn --batch-mode --update-snapshots verify
+    - run: mvn --batch-mode --update-snapshots verify
     - run: mkdir staging && cp target/*.jar staging
     - uses: actions/upload-artifact@v3
       with:
