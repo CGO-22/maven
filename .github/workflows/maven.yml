@@ -20,6 +20,7 @@ jobs:
         }
 
   build_test:
+    needs: install_maven
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
@@ -41,7 +42,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - run: mvn --batch-mode --update-snapshots verify
+    - run: C:\tools\apache-maven-3.9.6\bin\mvn --batch-mode --update-snapshots verify
     - run: mkdir staging && cp target/*.jar staging
     - uses: actions/upload-artifact@v3
       with:
