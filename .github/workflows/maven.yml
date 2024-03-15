@@ -9,6 +9,18 @@ on:
     branches: [ "main" ]
 
 jobs:
+  install_maven:
+    runs-on: self-hosted
+    steps:
+    - name: Download Maven
+      run: |
+        Invoke-WebRequest -Uri 'https://apache.osuosl.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.zip' -OutFile 'maven.zip'
+        Expand-Archive -Path 'maven.zip' -DestinationPath 'C:\tools'
+    - name: Set up Maven
+      run: |
+        $env:PATH += ";C:\tools\apache-maven-3.8.5\bin"
+        mvn -version
+        
   build_test:
 
     runs-on: self-hosted
