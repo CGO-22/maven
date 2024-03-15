@@ -45,7 +45,7 @@ jobs:
     - run: C:\tools\apache-maven-3.9.6\bin\mvn --batch-mode --update-snapshots verify
     - run: |
         mkdir staging  
-        cp target/*.jar staging
+        cp C:\github\actions-runner\_work\maven\maven\target\*.jar staging
     - uses: actions/upload-artifact@v3
       with:
         name: Package
