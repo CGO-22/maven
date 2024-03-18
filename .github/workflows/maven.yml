@@ -1,26 +1,10 @@
 name: Java Maven Build & Publish Artifact
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  install_maven:
-    runs-on: self-hosted
-    steps:
-    - name: Check if Maven is installed
-      run: |
-        if (!(Test-Path "$(Get-Command mvn -ErrorAction SilentlyContinue).Source")) {
-          Write-Host "Maven is not installed, proceeding with installation..."
-          # Place installation steps here
-        } else {
-          Write-Host "Maven is already installed."
-        }
-
   build_test:
-    needs: install_maven
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
