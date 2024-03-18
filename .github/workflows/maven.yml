@@ -30,12 +30,16 @@ jobs:
       run: |
         ls -R
     - run: C:\tools\apache-maven-3.9.6\bin\mvn --batch-mode --update-snapshots verify
-    - run: |
-        mkdir staging  
-        if (Test-Path 'C:\github\actions-runner\_work\maven\maven\target') {
+    - name: List files in Maven target directory
+      run: |
+        ls -R C:\github\actions-runner\_work\maven\maven\target
+    - name: Copy JAR file to staging directory
+      run: |
+        mkdir staging
+        if (Test-Path 'C:\github\actions-runner\_work\maven\maven\target\*.jar') {
           cp C:\github\actions-runner\_work\maven\maven\target\*.jar staging
         } else {
-          Write-Host "Target directory not found"
+          Write-Host "No JAR files found in the target directory."
           exit 1
         }
     - uses: actions/upload-artifact@v3
