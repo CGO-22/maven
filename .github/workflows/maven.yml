@@ -26,10 +26,18 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    - name: Verify Maven build output
+      run: |
+        ls -R
     - run: C:\tools\apache-maven-3.9.6\bin\mvn --batch-mode --update-snapshots verify
     - run: |
         mkdir staging  
-        cp C:\github\actions-runner\_work\maven\maven\target\*.jar staging
+        if (Test-Path 'C:\github\actions-runner\_work\maven\maven\target') {
+          cp C:\github\actions-runner\_work\maven\maven\target\*.jar staging
+        } else {
+          Write-Host "Target directory not found"
+          exit 1
+        }
     - uses: actions/upload-artifact@v3
       with:
         name: Package
